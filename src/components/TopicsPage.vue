@@ -1,5 +1,7 @@
 <template>
-  <div class="topics page"></div>
+  <div class="topics">
+
+  </div>
 </template>
 
 <script>
@@ -8,4 +10,9 @@
   }
 </script>
 
-<style lang="less"></style>
+<style lang="less">
+  .topics {
+    height: 100%;
+    background-color: #fff;
+  }
+</style>
