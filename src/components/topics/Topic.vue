@@ -1,32 +1,45 @@
 <template>
   <div class="topic">
     <div layout layout-align="start center" class="topic-user">
-      <img class="avatar" :src="defaultPoster"/>
+      <img class="avatar" :src="item.avatar_url || defaultPoster"/>
       <div layout="column" flex layout-align="space-between start" class="user-body">
-        <span class="nick-name">申杨杨</span>
-        <span class="topic-created">10小时前</span>
+        <span class="nick-name">{{item.nickname}}</span>
+        <span class="topic-created">{{item.created}}</span>
       </div>
     </div>
-    <div class="topic-context">
-      我TM的刚开始我的暑假生活哦
+    <div v-if="item.topic_context" class="topic-context">
+      {{item.topic_context}}
     </div>
-    <div class="topic-poster">
-      <img class="topic-image" :src="defaultPoster"/>
+    <div v-if="item.topic_poster" class="topic-poster">
+      <img class="topic-image" :src="item.topic_poster || defaultPoster"/>
+    </div>
+    <div v-if="item.topic_voice" class="topic-voice"
+         :style="{background: 'url('+item.avatar_url || defaultPoster+') no-repeat', backgroundSize: '6.7rem 1.8rem'}">
+      <div layout layout-align="start center" class="voice-mask">
+        <div layout="column" flex class="voice-body">
+          <span class="voice-label">录音</span>
+          <span class="voice-title">{{item.nickname}}上传了一段录音</span>
+          <span class="voice-time">90s</span>
+        </div>
+        <div layout layout-align="center center" class="avatar"
+             :style="{background: 'url('+item.avatar_url || defaultPoster+') no-repeat', backgroundSize: '1.2rem 1.2rem'}">
+          <i class="icon-play"></i>
+        </div>
+      </div>
     </div>
     <div layout class="topic-action">
       <i class="action-liker"></i>
       <i class="action-comment"></i>
     </div>
     <div layout class="topic-cnt">
-      <span>123次浏览</span>
-      <span>23次点赞</span>
+      <span>{{item.like_cnt}}次点赞</span>
     </div>
-    <div layout class="topic-comment">
-      <span class="nick-name">我叫小墨鱼：</span>
-      <span class="comment-context">给摄影师点赞</span>
+    <div v-for="(comment, index) in item.comment_list" :key="index" layout class="topic-comment">
+      <span class="nick-name">{{comment.nickname}}{{comment.reply_name ? `回复${comment.reply_name}` : ''}}：</span>
+      <span class="comment-context">{{comment.comment_context}}</span>
     </div>
     <div class="topic-comment-cnt">
-      查看3条评论
+      查看{{item.comment_cnt}}条评论
     </div>
   </div>
 </template>
@@ -38,7 +51,8 @@
       return {
         defaultPoster: require('../../assets/image/subject-poster.png'),
       }
-    }
+    },
+    props: ['item'],
   }
 </script>
 
@@ -61,6 +75,9 @@
         .size(.72rem);
 
         margin-right: .2rem;
+
+        border-radius: .36rem;
+        overflow: hidden;
       }
 
       .user-body {
@@ -92,6 +109,75 @@
       .topic-image {
         display: block;
         .size(6.7rem, 3.78rem);
+      }
+    }
+
+    .topic-voice {
+      position: relative;
+      .size(100%, 1.8rem);
+
+      border-radius: .06rem;
+      overflow: hidden;
+
+      .voice-mask {
+        position: absolute;
+        z-index: 6;
+
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+
+        .size(100%, 1.8rem);
+
+        padding: 0 .3rem;
+
+        background-color: rgba(0, 0, 0, .1);
+
+        .avatar {
+          .size(1.2rem);
+
+          border-radius: .6rem;
+          overflow: hidden;
+
+          .icon-play {
+            .size(.48rem);
+
+            background: url("../../assets/image/icon-play.png") no-repeat;
+            background-size: .48rem .48rem;
+          }
+        }
+
+        .voice-body {
+          .voice-label {
+            .size(.48rem, .24rem);
+
+            font-size: .12rem;
+            color: #000;
+
+            text-align: center;
+            line-height: .24rem;
+
+            border-radius: .04rem;
+            overflow: hidden;
+
+            background-color: #fadc22;
+          }
+
+          .voice-title {
+            padding: .05rem 0;
+
+            font-size: .32rem;
+            color: #fff;
+          }
+
+          .voice-time {
+            font-size: .22rem;
+            color: #fff;
+
+            opacity: .6;
+          }
+        }
       }
     }
 

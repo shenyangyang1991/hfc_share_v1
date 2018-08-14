@@ -1,6 +1,6 @@
 <template>
   <div class="subject-poster">
-    <img class="subject-image" :src="poster"/>
+    <img class="subject-image" :src="src || poster"/>
     <i class="subject-helper"></i>
   </div>
 </template>
@@ -13,11 +13,7 @@
         poster: require('../../assets/image/subject-poster.png'),
       }
     },
-    methods: {
-      setPoster(poster) {
-        this.poster = poster
-      }
-    }
+    props: ['src'],
   }
 </script>
 

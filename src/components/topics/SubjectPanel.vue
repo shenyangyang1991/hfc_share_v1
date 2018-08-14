@@ -1,16 +1,16 @@
 <template>
   <div class="subject-panel">
-    <subject-poster ref="poster"/>
+    <subject-poster :src="body.subject_poster"/>
     <div layout layout-align="start center" class="subject-cnt">
-      <span>123关注</span>
+      <span>{{body.people_cnt}}人参与</span>
       <span>·</span>
-      <span>123内容</span>
+      <span>{{body.topic_cnt}}条内容</span>
     </div>
     <div class="subject-title">
-      中国有嘻哈我他吗的才是嘻哈
+      {{body.subject_title}}
     </div>
     <div class="subject-follower">
-      关注
+      {{body.follower ? '取消关注' : '关注'}}
     </div>
   </div>
 </template>
@@ -22,7 +22,8 @@
     name: 'SubjectPanel',
     components: {
       SubjectPoster,
-    }
+    },
+    props: ['body'],
   }
 </script>
 
