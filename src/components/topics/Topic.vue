@@ -1,7 +1,7 @@
 <template>
   <div class="topic">
     <div layout layout-align="start center" class="topic-user">
-      <img class="avatar" :src="item.avatar_url || defaultPoster"/>
+      <img class="avatar" :src="item.avatar_url || defaultAvatar"/>
       <div layout="column" flex layout-align="space-between start" class="user-body">
         <span class="nick-name">{{item.nickname}}</span>
         <span class="topic-created">{{item.created}}</span>
@@ -14,7 +14,7 @@
       <img class="topic-image" :src="item.topic_poster || defaultPoster"/>
     </div>
     <div v-if="item.topic_voice" class="topic-voice"
-         :style="{background: 'url('+item.avatar_url || defaultPoster+') no-repeat', backgroundSize: '6.7rem 1.8rem'}">
+         :style="{background: 'url('+(item.avatar_url || defaultAvatar)+') no-repeat center',  backgroundPosition: 'center', backgroundSize: 'cover'}">
       <div layout layout-align="start center" class="voice-mask">
         <div layout="column" flex class="voice-body">
           <span class="voice-label">录音</span>
@@ -22,7 +22,7 @@
           <span class="voice-time">90s</span>
         </div>
         <div layout layout-align="center center" class="avatar"
-             :style="{background: 'url('+item.avatar_url || defaultPoster+') no-repeat', backgroundSize: '1.2rem 1.2rem'}">
+             :style="{background: 'url('+(item.avatar_url || defaultAvatar)+') no-repeat', backgroundPosition: 'center', backgroundSize: '1.2rem 1.2rem'}">
           <i class="icon-play"></i>
         </div>
       </div>
@@ -50,6 +50,7 @@
     data() {
       return {
         defaultPoster: require('../../assets/image/subject-poster.png'),
+        defaultAvatar: require('../../assets/image/avatar.png')
       }
     },
     props: ['item'],
@@ -132,7 +133,7 @@
 
         padding: 0 .3rem;
 
-        background-color: rgba(0, 0, 0, .1);
+        background-color: rgba(0, 0, 0, .7);
 
         .avatar {
           .size(1.2rem);
