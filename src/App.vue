@@ -37,7 +37,7 @@
       bottom: 0;
       left: 0;
       right: 0;
-      z-index: 9;
+      z-index: 99999;
 
       height: 1.28rem;
 

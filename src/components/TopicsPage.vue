@@ -1,5 +1,6 @@
 <template>
-  <scroll :data="topics"
+  <scroll v-if="success"
+          :data="topics"
           :pullup="pullUp"
           @scrollToEnd="loadNext">
     <subject-panel :body="subject"/>
@@ -26,11 +27,52 @@
         pullUp: true,
         subject: {},
         topics: [],
+        offset: 1,
+        success: false,
+        id: 0,
+        tasking: false,
       }
     },
     methods: {
-      loadNext() {
-        console.log('next')
+      async loadNext() {
+        if (this.tasking) return
+        this.tasking = true
+        let len = this.topics && this.topics.length
+        if (len && len == 10) {
+          this.offset++
+          await this.loadData()
+        }
+        this.tasking = false
+      },
+      async loadData() {
+        let response = await this.$http.get(`/v1/recommended/topics?subject_id=${this.id}&offset=${this.offset}`)
+        let result = response.data
+        this.success = result.success
+        if (result.success) {
+          let list = result.data.list || []
+          this.topics = this.offset > 1 ? [].concat(this.topics).concat(list) : list
+        } else {
+          this.$toasted.error('请求内容列表失败')
+        }
+      }
+    },
+    async created() {
+      let loader = this.$loading.show()
+      let {subject_id} = this.$route.query
+      if (!subject_id) {
+        this.$toasted.error('打开页面错误，缺少参数')
+      } else {
+        this.id = subject_id
+        let response = await this.$http.get(`/v1/recommended/subject?subject_id=${subject_id}`)
+        let result = response.data
+        if (result.success) {
+          this.subject = result.data || {}
+          document.title = this.subject.subject_title
+        } else {
+          this.$toasted.error('请求话题内容失败')
+        }
+        await this.loadData()
+        loader.hide()
       }
     }
   }
