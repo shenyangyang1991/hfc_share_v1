@@ -19,11 +19,15 @@
         <div layout="column" flex class="voice-body">
           <span class="voice-label">录音</span>
           <span class="voice-title">{{item.nickname}}上传了一段录音</span>
-          <span class="voice-time">90s</span>
+          <span class="voice-time">{{duration}}s</span>
         </div>
+        <audio :ref="`av${item.topic_id}`" :src="item.topic_voice" @loadedmetadata="meta" @play="play"
+               @ended="pause"
+               @pause="pause"></audio>
         <div layout layout-align="center center" class="avatar"
+             @click="controll(item.topic_id)"
              :style="{background: 'url('+(item.avatar_url || defaultAvatar)+') no-repeat', backgroundPosition: 'center', backgroundSize: '1.2rem 1.2rem'}">
-          <i class="icon-play"></i>
+          <i :class="{'icon-play': !paused, 'icon-pause': paused}"></i>
         </div>
       </div>
     </div>
@@ -50,10 +54,41 @@
     data() {
       return {
         defaultPoster: require('../../assets/image/subject-poster.png'),
-        defaultAvatar: require('../../assets/image/avatar.png')
+        defaultAvatar: require('../../assets/image/avatar.png'),
+        duration: 0,
+        timer: 0,
+        paused: false,
       }
     },
     props: ['item'],
+    methods: {
+      controll(id) {
+        let au = this.$refs[`av${id}`]
+        if (au) {
+          if (au.paused) {
+            au.play()
+          } else {
+            au.pause()
+          }
+        }
+      },
+      meta(e) {
+        this.duration = parseInt(e.target.duration) || 0
+      },
+      play(e) {
+        this.paused = true
+        this.duration = parseInt(e.target.currentTime)
+        this.timer = setInterval(() => {
+          this.duration = parseInt(e.target.currentTime)
+        }, 1000)
+        this.$emit('voiceStart', e.target)
+      },
+      pause(e) {
+        this.paused = false
+        clearInterval(this.timer)
+        this.$emit('voiceEnd', e.target)
+      }
+    }
   }
 </script>
 
@@ -145,6 +180,13 @@
             .size(.48rem);
 
             background: url("../../assets/image/icon-play.png") no-repeat;
+            background-size: .48rem .48rem;
+          }
+
+          .icon-pause {
+            .size(.48rem);
+
+            background: url("../../assets/image/icon-pause.png") no-repeat;
             background-size: .48rem .48rem;
           }
         }

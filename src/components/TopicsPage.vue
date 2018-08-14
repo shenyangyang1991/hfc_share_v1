@@ -5,7 +5,7 @@
           @scrollToEnd="loadNext">
     <subject-panel :body="subject"/>
     <div class="topic-list">
-      <topic v-for="(body, index) in topics" :key="index" :item="body"/>
+      <topic v-for="(body, index) in topics" :key="index" :item="body" @voiceStart="audioStart" @voiceEnd="audioEnd"/>
     </div>
   </scroll>
 </template>
@@ -31,6 +31,7 @@
         success: false,
         id: 0,
         tasking: false,
+        currentAudio: null,
       }
     },
     methods: {
@@ -54,6 +55,17 @@
         } else {
           this.$toasted.error('请求内容列表失败')
         }
+      },
+      audioStart(e) {
+        console.log(e)
+        if (this.currentAudio) {
+          this.currentAudio.pause()
+        }
+
+        this.currentAudio = e
+      },
+      audioEnd() {
+        this.currentAudio = null
       }
     },
     async created() {
