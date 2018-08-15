@@ -4,7 +4,7 @@
       <img class="avatar" :src="item.avatar_url || defaultAvatar"/>
       <div layout="column" flex layout-align="space-between start" class="user-body">
         <span class="nick-name">{{item.nickname}}</span>
-        <span class="topic-created">{{item.created}}</span>
+        <span class="topic-created">{{item.created | date}}</span>
       </div>
     </div>
     <div v-if="item.topic_context" class="topic-context">
@@ -49,6 +49,8 @@
 </template>
 
 <script>
+  import {FormatDate} from '../../filter/created'
+
   export default {
     name: 'Topic',
     data() {
@@ -87,6 +89,11 @@
         this.paused = false
         clearInterval(this.timer)
         this.$emit('voiceEnd', e.target)
+      }
+    },
+    filters: {
+      date(str) {
+        return FormatDate(str)
       }
     }
   }
