@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-const TopicsPage = () => import('../components/TopicsPage')
+const SubjectPage = () => import('../components/SubjectPage')
 const TopicPage = () => import('../components/TopicPage')
 const Page = () => import('../components/Page')
 
@@ -15,9 +15,9 @@ export default new Router({
       component: Page,
       children: [
         {
-          path: 'topics',
-          name: 'TopicsPage',
-          component: TopicsPage
+          path: 'subject',
+          name: 'SubjectPage',
+          component: SubjectPage
         },
         {
           path: 'topic',

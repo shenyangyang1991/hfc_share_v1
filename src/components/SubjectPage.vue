@@ -16,7 +16,7 @@
   import Scroll from './common/BatterScroll'
 
   export default {
-    name: 'TopicsPage',
+    name: 'SubjectPage',
     components: {
       SubjectPanel,
       Topic,
