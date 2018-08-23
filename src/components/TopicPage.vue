@@ -1,11 +1,13 @@
 <template>
-  <div class="topic-singe">
+  <scroll v-if="success"
+          :data="topic">
     <topic v-if="success" :item="topic"/>
-  </div>
+  </scroll>
 </template>
 
 <script>
   import Topic from './topics/Topic'
+  import Scroll from './common/BatterScroll'
 
   export default {
     name: 'TopicPage',
@@ -17,13 +19,14 @@
       }
     },
     components: {
-      Topic
+      Topic,
+      Scroll
     },
     async created() {
       let loader = this.$loading.show()
       let {topic_id} = this.$route.query
       if (!topic_id) {
-        this.$toasted.error('打开页面错误，缺少参数')
+        this.$toasted.error('页面错误')
       } else {
         this.id = topic_id
         let response = await this.$http.get(`/v1/recommended/topic?topic_id=${topic_id}`)
@@ -39,11 +42,3 @@
     }
   }
 </script>
-
-<style lang="less">
-  .topic-singe {
-    position: relative;
-    height: 100%;
-    background-color: #fff;
-  }
-</style>

@@ -5,11 +5,11 @@ import App from './App'
 import router from './router'
 // 转场动画
 import VueG from 'vueg'
+// 转场动画定义
+import 'vueg/css/transition-min.css'
 // axios
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-// 转场动画定义
-import 'vueg/css/transition-min.css'
 // toast
 import Toasted from 'vue-toasted'
 // loading

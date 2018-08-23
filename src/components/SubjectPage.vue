@@ -48,7 +48,6 @@
       async loadData() {
         let response = await this.$http.get(`/v1/recommended/topics?subject_id=${this.id}&offset=${this.offset}`)
         let result = response.data
-        this.success = result.success
         if (result.success) {
           let list = result.data.list || []
           this.topics = this.offset > 1 ? [].concat(this.topics).concat(list) : list
@@ -57,7 +56,6 @@
         }
       },
       audioStart(e) {
-        console.log(e)
         if (this.currentAudio) {
           this.currentAudio.pause()
         }
@@ -72,11 +70,12 @@
       let loader = this.$loading.show()
       let {subject_id} = this.$route.query
       if (!subject_id) {
-        this.$toasted.error('打开页面错误，缺少参数')
+        this.$toasted.error('页面错误')
       } else {
         this.id = subject_id
         let response = await this.$http.get(`/v1/recommended/subject?subject_id=${subject_id}`)
         let result = response.data
+        this.success = result.success
         if (result.success) {
           this.subject = result.data || {}
           document.title = this.subject.subject_title

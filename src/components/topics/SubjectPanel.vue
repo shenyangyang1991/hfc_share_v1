@@ -2,7 +2,7 @@
   <div class="subject-panel">
     <subject-poster :src="body.subject_poster"/>
     <div layout layout-align="start center" class="subject-cnt">
-      <span>{{body.people_cnt}}人参与</span>
+      <span>{{body.follower_cnt}}人关注</span>
       <span>·</span>
       <span>{{body.topic_cnt}}条内容</span>
     </div>
