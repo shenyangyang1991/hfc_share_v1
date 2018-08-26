@@ -3,9 +3,16 @@ const MINUTE = 60 * 60
 const HOUR = MINUTE * 24
 const DAY = HOUR * 30
 const MONTH = DAY * 12
+const CN_ZONE = 8 * 3600 * 1000
 
 export function FormatDate(format) {
-  let timestamp = (new Date(format)).getTime()
+  if (format && typeof format === 'string' && format.length == 25) {
+    format = format.slice(0, -6)
+  } else {
+    return ''
+  }
+  
+  let timestamp = (new Date(format)).getTime() + CN_ZONE
   let now = Date.now()
 
   let time = (now - timestamp)/1000
