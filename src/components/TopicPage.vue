@@ -1,6 +1,6 @@
 <template>
   <scroll v-if="success"
-          :data="topic">
+          :data="[]">
     <topic v-if="success" :item="topic"/>
   </scroll>
 </template>

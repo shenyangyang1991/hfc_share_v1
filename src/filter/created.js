@@ -8,7 +8,7 @@ export function FormatDate(format) {
   let timestamp = (new Date(format)).getTime()
   let now = Date.now()
 
-  let time = now - timestamp
+  let time = (now - timestamp)/1000
   if (time < JUST) {
     return '刚刚'
   } else if (time >= JUST && time < MINUTE) {

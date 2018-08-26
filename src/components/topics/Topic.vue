@@ -11,7 +11,7 @@
       {{item.topic_context}}
     </div>
     <div v-if="item.topic_poster" class="topic-poster">
-      <img class="topic-image" :src="item.topic_poster || defaultPoster"/>
+      <img class="topic-image" :src="item.topic_poster || defaultPoster" :style="item | renderImage"/>
     </div>
     <div v-if="item.topic_voice" class="topic-voice"
          :style="{background: 'url('+(item.avatar_url || defaultAvatar)+') no-repeat center',  backgroundPosition: 'center', backgroundSize: 'cover'}">
@@ -20,7 +20,7 @@
           <span class="voice-label">录音</span>
           <span class="voice-title">{{item.nickname}}上传了一段录音</span>
           <span v-if="paused" class="voice-time">正在播放...</span>
-          <span v-else class="voice-time">{{item.voice_time}}</span>
+          <span v-else class="voice-time">{{item.voice_time | duration}}</span>
         </div>
         <audio :ref="`av${item.topic_id}`" :src="item.topic_voice" @play="play"
                @ended="pause"
@@ -51,6 +51,7 @@
 
 <script>
 import { FormatDate } from '../../filter/created'
+import { FormatTime } from '../../filter/duration'
 
 export default {
   name: 'Topic',
@@ -68,23 +69,34 @@ export default {
       if (au) {
         if (au.paused) {
           au.play()
+          this.$emit('voiceStart', au)
         } else {
           au.pause()
+          this.$emit('voiceEnd', au)
         }
       }
     },
     play(e) {
       this.paused = true
-      this.$emit('voiceStart', e.target)
     },
     pause(e) {
       this.paused = false
-      this.$emit('voiceEnd', e.target)
     }
   },
   filters: {
     date(str) {
       return FormatDate(str)
+    },
+    duration(time) {
+      return FormatTime(time)
+    },
+    renderImage(w) {
+      let radio = w.poster_height / w.poster_width
+      if (radio) {
+        return {
+          height: (6.7 * radio) + 'rem'
+        }
+      }
     }
   }
 }
@@ -227,17 +239,19 @@ export default {
 
     .action-liker {
       background: url("../../assets/image/icon-liker.png") no-repeat;
-      background-size: 0.44rem 0.44rem;
+      background-position: center center;
+      background-size: 0.48rem 0.44rem;
     }
 
     .action-comment {
       background: url("../../assets/image/icon-comment.png") no-repeat;
-      background-size: 0.44rem 0.44rem;
+      background-position: center center;
+      background-size: 0.46rem 0.46rem;
     }
 
     & > i {
       display: block;
-      .size(0.44rem);
+      .size(0.48rem);
 
       margin-right: 0.3rem;
     }

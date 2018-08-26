@@ -55,12 +55,12 @@
           this.$toasted.error('请求内容列表失败')
         }
       },
-      audioStart(e) {
+      audioStart(au) {
         if (this.currentAudio) {
           this.currentAudio.pause()
         }
 
-        this.currentAudio = e
+        this.currentAudio = au
       },
       audioEnd() {
         this.currentAudio = null
